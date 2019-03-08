@@ -1,0 +1,9 @@
+td{
+  height: 7em;
+  width: 7em;
+  border: .2em black solid;
+}
+
+.align_center{
+  text-align: center;
+}
