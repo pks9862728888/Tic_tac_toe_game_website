@@ -71,6 +71,24 @@
         </tr>
       </table>
 
+      <!-- Modal -->
+      <div class="modal fade" id="player_victory_display" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="winner_modal_title">Winner for Round: 0</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="player_victory_text"></div>
+            <div class="modal-footer">
+              <button type="button" id="start_next_round" class="btn btn-primary" data-dismiss="modal">Start Next Round</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <p class="lead"></p>
 
       <!-- Loading script -->
