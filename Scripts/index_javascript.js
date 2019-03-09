@@ -27,6 +27,14 @@ var playerTwoScore = document.querySelector("#player_two_score");
 var resetScore = document.querySelector("#reset_score");
 var restartGame = document.querySelector("#restart_game");
 
+// Selecting winner status model by Id
+var winnerModalTitle = document.querySelector("#winner_modal_title");
+var playerVictoryText = document.querySelector("#player_victory_text");
+var startNextRound = document.querySelector("#start_next_round");
+
+// Hiding modal so that it does not get triggered accidentally
+$('#player_victory_display').modal('hide');
+
 // Player active state control variables
 var playerOneActive = false;
 var playerTwoActive = false;
@@ -37,6 +45,9 @@ var firstTime = true;
 // Players winning count
 var playerOneVictoryCount = 0;
 var playerTwoVictoryCount = 0;
+
+// Game round count
+var gameRound = 0;
 
 // Board cell selected control variable
 zeroZeroSelected = false;
@@ -90,37 +101,47 @@ function nextPlayer(){
   }
 }
 
-// Increments victory count
-function incrementVictory(value){
+// Shows modal
+function modalShow(player_no){
+  winnerModalTitle.innerHTML = "Winner for Round: " + gameRound.toString();
+  playerVictoryText.innerHTML = "Player " + player_no.toString() + " won this round!";
+  $('#player_victory_display').modal('show');
+}
+
+// Increments victory count and shows modal
+function incrementVictoryShowModal(value){
   if(value == PLAYER_ONE){
     playerOneVictoryCount += 1;
+    gameRound += 1;
     playerOneScore.innerHTML = "Score: " + playerOneVictoryCount.toString();
+    modalShow(1);
   }
   else if (value == PLAYER_TWO){
     playerTwoVictoryCount += 1;
-    console.log(playerTwoVictoryCount)
+    gameRound += 1;
     playerTwoScore.innerHTML = "Score: " + playerTwoVictoryCount.toString();
+    modalShow(2);
   }
 }
 
 // Checks victory status
 function checkVictoryStatus(){
   if(zeroZeroValue === zeroOneValue && zeroOneValue === zeroTwoValue)
-    incrementVictory(zeroZeroValue)
+    incrementVictoryShowModal(zeroZeroValue)
   else if(oneZeroValue === oneOneValue && oneOneValue === oneTwoValue)
-    incrementVictory(oneZeroValue)
+    incrementVictoryShowModal(oneZeroValue)
   else if(twoZeroValue === twoOneValue && twoOneValue === twoTwoValue)
-    incrementVictory(twoZeroValue)
+    incrementVictoryShowModal(twoZeroValue)
   else if(zeroZeroValue === oneZeroValue && oneZeroValue === twoZeroValue)
-    incrementVictory(zeroZeroValue)
+    incrementVictoryShowModal(zeroZeroValue)
   else if(zeroOneValue === oneOneValue && oneOneValue === twoOneValue)
-    incrementVictory(zeroOneValue)
+    incrementVictoryShowModal(zeroOneValue)
   else if(zeroTwoValue === oneOneValue && oneOneValue === twoTwoValue)
-    incrementVictory(zeroTwoValue)
+    incrementVictoryShowModal(zeroTwoValue)
   else if(zeroZeroValue === oneOneValue && oneOneValue === twoTwoValue)
-    incrementVictory(zeroZeroValue)
+    incrementVictoryShowModal(zeroZeroValue)
   else if(zeroTwoValue === oneOneValue && oneOneValue === twoZeroValue)
-    incrementVictory(zeroTwoValue)
+    incrementVictoryShowModal(zeroTwoValue)
 }
 
 // Setting active state based on selected player
