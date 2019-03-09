@@ -13,7 +13,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src="Scripts/index_javascript.js"></script>
 
     <title>Tic Tac Toe</title>
   </head>
@@ -23,11 +22,37 @@
         <h1 class="display-4" align="center">Welcome to Tic Tac Toe!</h1>
         <p class="lead" align="center">The player who first makes horizontal, vertical or diagonal elements same wins.</p>
         <hr class="display-4">
-        <div class="align_center">
-          <a class="btn btn-primary btn-lg" href="#" role="button">Restart</a>
+
+        <!-- Player selection and restart -->
+        <div class="d-flex justify-content-around">
+          <div class="d-flex align-self-start">
+            <button type="button" class="btn btn-outline-primary" id="player_one">  Player 1  </button>
+          </div>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-outline-danger" id="reset_score"> Reset Score </button>
+          </div>
+          <div class="d-flex align-self-end">
+            <button type="button" class="btn btn-outline-primary" id="player_two">  Player 2  </button>
+          </div>
+        </div>
+
+        <p class="lead"></p>
+
+        <!-- Display scores -->
+        <div class="d-flex justify-content-around">
+          <div class="d-flex align-self-start">
+            <button type="button" class="btn btn-outline-primary" id="player_one_score" disabled>Score: 0</button>
+          </div>
+          <div class="d-flex align-items-center">
+            <button type="button" class="btn btn-outline-success" id="restart_game">Restart Game</button>
+          </div>
+          <div class="d-flex align-self-end">
+            <button type="button" class="btn btn-outline-primary" id="player_two_score" disabled>Score: 0</button>
+          </div>
         </div>
       </div>
 
+      <!-- Game panel -->
       <table align='center'>
         <tr>
           <td id="zero_zero"></td>
@@ -42,11 +67,14 @@
         <tr>
           <td id="two_zero"></td>
           <td id="two_one"></td>
-          <td id="two-two"></td>
+          <td id="two_two"></td>
         </tr>
       </table>
 
       <p class="lead"></p>
+
+      <!-- Loading script -->
+      <script type="text/javascript" src="Scripts/index_javascript.js"></script>
     </div>
   </body>
 </html>
