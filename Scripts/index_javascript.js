@@ -90,6 +90,10 @@ function selectPlayerOne(){
   playerOneActive = true;
   firstTime = false;
 
+  // Focussing player one button
+  playerOne.focus()
+  playerTwo.disabled = true;
+
   // Storing information about which player started the round
   playerStart = PLAYER_ONE;
 }
@@ -107,10 +111,20 @@ function nextPlayer(){
   if(playerOneActive){
     playerOneActive = false;
     playerTwoActive = true;
+
+    // Focussing player one button
+    playerTwo.disabled = false;
+    playerTwo.focus();
+    playerOne.disabled = true;
   }
   else if(playerTwoActive){
     playerTwoActive = false;
     playerOneActive = true;
+
+    // Focussing player one button
+    playerOne.disabled = false;
+    playerOne.focus();
+    playerTwo.disabled = true;
   }
 }
 
@@ -248,7 +262,6 @@ zeroZero.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 zeroOne.addEventListener("click", function(){
@@ -272,7 +285,6 @@ zeroOne.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 zeroTwo.addEventListener("click", function(){
@@ -296,7 +308,6 @@ zeroTwo.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 oneZero.addEventListener("click", function(){
@@ -320,7 +331,6 @@ oneZero.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 oneOne.addEventListener("click", function(){
@@ -344,7 +354,6 @@ oneOne.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 oneTwo.addEventListener("click", function(){
@@ -368,7 +377,6 @@ oneTwo.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 twoZero.addEventListener("click", function(){
@@ -392,7 +400,6 @@ twoZero.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 twoOne.addEventListener("click", function(){
@@ -416,7 +423,6 @@ twoOne.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 twoTwo.addEventListener("click", function(){
@@ -440,7 +446,6 @@ twoTwo.addEventListener("click", function(){
 
     // Checking whether all cells are filled
     checkFilledStatus();
-
 }});
 
 // If clear score button is clicked
