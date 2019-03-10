@@ -32,6 +32,9 @@ var winnerModalTitle = document.querySelector("#winner_modal_title");
 var playerVictoryText = document.querySelector("#player_victory_text");
 var startNextRound = document.querySelector("#start_next_round");
 
+// Selecting squares of board
+var squares = document.querySelectorAll("td");
+
 // Player active state control variables
 var playerOneActive = false;
 var playerTwoActive = false;
@@ -212,18 +215,10 @@ function checkFilledStatus(){
 
 // Clears board values of previous game
 function clearBoard(){
-  zeroZero.innerHTML = "";
-  zeroOne.innerHTML = "";
-  zeroTwo.innerHTML = "";
-
-  oneZero.innerHTML = "";
-  oneOne.innerHTML = "";
-  oneTwo.innerHTML = "";
-
-  twoZero.innerHTML = "";
-  twoOne.innerHTML = "";
-  twoTwo.innerHTML = "";
-}
+  for(var i=0; i < squares.length; i++){
+    squares[i].textContent = "";
+  }
+};
 
 // Setting active state based on selected player
 playerOne.addEventListener("click", function(){
@@ -231,7 +226,7 @@ playerOne.addEventListener("click", function(){
     playerOneActive = true;
     firstTime = false;
     playerStart = PLAYER_ONE;
-  }});
+}});
 
 // If user starts game without selecting player
 playerTwo.addEventListener("click", function(){
@@ -239,7 +234,7 @@ playerTwo.addEventListener("click", function(){
     playerTwoActive = true;
     firstTime = false;
     playerStart = PLAYER_TWO;
-  }});
+}});
 
 zeroZero.addEventListener("click", function(){
   if(!zeroZeroSelected){
@@ -498,6 +493,296 @@ restartGame.addEventListener("click", function(){
 
 // If start next round is selected in modal
 startNextRound.addEventListener("click", function(){
+  // Setting the player whose turn should be first for this Round
+  if(playerStart == PLAYER_ONE){
+    playerOneActive = true;
+    playerTwoActive = false;
+  }else if (playerStart == PLAYER_TWO) {
+    playerTwoActive = true;
+    playerOneActive = false;
+  }
+
+  // Initializing board and values
+  initializeBoardAndValues();
+
+  // Clearing Board
+  clearBoard();
+});
+
+// ********************** Touch sensitivity for mobiles ************************
+// Setting active state based on selected player
+playerOne.addEventListener("touchstart", function(){
+  if(firstTime){
+    playerOneActive = true;
+    firstTime = false;
+    playerStart = PLAYER_ONE;
+  }});
+
+// If user starts game without selecting player
+playerTwo.addEventListener("touchstart", function(){
+  if(firstTime){
+    playerTwoActive = true;
+    firstTime = false;
+    playerStart = PLAYER_TWO;
+}});
+
+zeroZero.addEventListener("touchstart", function(){
+  if(!zeroZeroSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    zeroZeroValue = fillBoard();
+    zeroZero.innerHTML = zeroZeroValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    zeroZeroSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+zeroOne.addEventListener("touchstart", function(){
+  if(!zeroOneSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    zeroOneValue = fillBoard();
+    zeroOne.innerHTML = zeroOneValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    zeroOneSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+zeroTwo.addEventListener("touchstart", function(){
+  if(!zeroTwoSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    zeroTwoValue = fillBoard();
+    zeroTwo.innerHTML = zeroTwoValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    zeroTwoSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+oneZero.addEventListener("touchstart", function(){
+  if(!oneZeroSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    oneZeroValue = fillBoard();
+    oneZero.innerHTML = oneZeroValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    oneZeroSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+oneOne.addEventListener("touchstart", function(){
+  if(!oneOneSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    oneOneValue = fillBoard()
+    oneOne.innerHTML = oneOneValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    oneOneSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+oneTwo.addEventListener("touchstart", function(){
+  if(!oneTwoSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    oneTwoValue = fillBoard();
+    oneTwo.innerHTML = oneTwoValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    oneTwoSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+twoZero.addEventListener("touchstart", function(){
+  if(!twoZeroSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    twoZeroValue = fillBoard();
+    twoZero.innerHTML = twoZeroValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    twoZeroSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+twoOne.addEventListener("touchstart", function(){
+  if(!twoOneSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    twoOneValue = fillBoard();
+    twoOne.innerHTML = twoOneValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    twoOneSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+twoTwo.addEventListener("touchstart", function(){
+  if(!twoTwoSelected){
+    // Setting default as player 1 if user starts game without selecting player
+    if(playerOneActive === false && playerTwoActive === false)
+      selectPlayerOne();
+
+    // Storing the value of cell and putting value in cell according to selected player
+    twoTwoValue = fillBoard();
+    twoTwo.innerHTML = twoTwoValue;
+
+    // Setting next player as active after response
+    nextPlayer();
+
+    // Setting that this board cell has been selected
+    twoTwoSelected = true;
+
+    // Checking winning status
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
+}});
+
+// If clear score button is clicked
+resetGame.addEventListener("touchstart", function(){
+  // Clear displaying scores
+  playerOneScore.innerHTML = "Score: 0";
+  playerTwoScore.innerHTML = "Score: 0";
+
+  // Clearing Board
+  clearBoard();
+
+  // Player active state control variables
+  playerOneActive = false;
+  playerTwoActive = false;
+
+  // First time player select state contol variable
+  firstTime = true;
+
+  // Contains information about which player started the Round
+  playerStart = "";
+
+  // Players winning count
+  playerOneVictoryCount = 0;
+  playerTwoVictoryCount = 0;
+
+  // Game round count
+  gameRound = 0;
+
+  // Initializing board values
+  initializeBoardAndValues();
+});
+
+// If restart game button is clicked
+restartGame.addEventListener("touchstart", function(){
+  // Setting the player whose turn should be first for this Round
+  if(playerStart == PLAYER_ONE){
+    playerOneActive = true;
+    playerTwoActive = false;
+  }else if (playerStart == PLAYER_TWO) {
+    playerTwoActive = true;
+    playerOneActive = false;
+  }
+
+  // Initializing board and values
+  initializeBoardAndValues();
+
+  // Clearing Board
+  clearBoard();
+});
+
+// If start next round is selected in modal
+startNextRound.addEventListener("touchstart", function(){
   // Setting the player whose turn should be first for this Round
   if(playerStart == PLAYER_ONE){
     playerOneActive = true;
