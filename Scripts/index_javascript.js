@@ -1,6 +1,7 @@
 // Constants
 var PLAYER_ONE = "X";
 var PLAYER_TWO = "O";
+var VICTORY_SCORE = 5;
 
 // Selecting elements of board by id
 var zeroZero = document.querySelector("#zero_zero");
@@ -51,6 +52,9 @@ var playerTwoVictoryCount = 0;
 
 // Game round count
 var gameRound = 0;
+
+// Whether game is over or not.
+var gameOver = false;
 
 // Initializes cell selection variables, cells values
 function initializeBoardAndValues(){
@@ -138,19 +142,49 @@ function modalShow(player_no){
   $('#player_victory_display').modal('show');
 }
 
+// ******************** WINNER **********************
+// Player who is first to score 10 wins
+function checkWinner(){
+  if(playerOneVictoryCount === VICTORY_SCORE){
+    gameOver = true;
+    winnerModalTitle.innerHTML = "Player 1 wins!!";
+    playerVictoryText.innerHTML = "Congratulations! Well played.";
+    startNextRound.innerHTML = "Start a new match";
+    $('#player_victory_display').modal('show');
+  }else if (playerTwoVictoryCount === VICTORY_SCORE) {
+    gameOver = true;
+    winnerModalTitle.innerHTML = "Player 2 wins!!";
+    playerVictoryText.innerHTML = "Congratulations! Well played.";
+    startNextRound.innerHTML = "Start a new match";
+    $('#player_victory_display').modal('show');
+  }
+}
+
 // Increments victory count and shows modal
 function incrementVictoryShowModal(value){
   if(value == PLAYER_ONE){
     playerOneVictoryCount += 1;
     gameRound += 1;
     playerOneScore.innerHTML = "Score: " + playerOneVictoryCount.toString();
-    modalShow(1);
+
+    // Displaying winner of game
+    checkWinner();
+
+    // Displaying winner of round
+    if(!gameOver)
+      modalShow(1);
   }
   else if (value == PLAYER_TWO){
     playerTwoVictoryCount += 1;
     gameRound += 1;
     playerTwoScore.innerHTML = "Score: " + playerTwoVictoryCount.toString();
-    modalShow(2);
+
+    // Displaying winner of game
+    checkWinner();
+
+    // Displaying winner of round
+    if(!gameOver)
+      modalShow(2);
   }
 
   // Setting who should start next Round
@@ -471,6 +505,13 @@ resetGame.addEventListener("click", function(){
 
   // Initializing board values
   initializeBoardAndValues();
+
+  // Activating player selection buttons
+  playerOne.disabled = false;
+  playerTwo.disabled = false;
+
+  // Setting game over status
+  gameOver = false;
 });
 
 // If restart game button is clicked
@@ -493,20 +534,59 @@ restartGame.addEventListener("click", function(){
 
 // If start next round is selected in modal
 startNextRound.addEventListener("click", function(){
-  // Setting the player whose turn should be first for this Round
-  if(playerStart == PLAYER_ONE){
-    playerOneActive = true;
-    playerTwoActive = false;
-  }else if (playerStart == PLAYER_TWO) {
-    playerTwoActive = true;
+  if(!gameOver){
+    // Setting the player whose turn should be first for this Round
+    if(playerStart == PLAYER_ONE){
+      playerOneActive = true;
+      playerTwoActive = false;
+    }else if (playerStart == PLAYER_TWO) {
+      playerTwoActive = true;
+      playerOneActive = false;
+    }
+
+    // Initializing board and values
+    initializeBoardAndValues();
+
+    // Clearing Board
+    clearBoard();
+  }else{
+    // Clear displaying scores
+    playerOneScore.innerHTML = "Score: 0";
+    playerTwoScore.innerHTML = "Score: 0";
+
+    // Clearing Board
+    clearBoard();
+
+    // Player active state control variables
     playerOneActive = false;
+    playerTwoActive = false;
+
+    // First time player select state contol variable
+    firstTime = true;
+
+    // Contains information about which player started the Round
+    playerStart = "";
+
+    // Players winning count
+    playerOneVictoryCount = 0;
+    playerTwoVictoryCount = 0;
+
+    // Game round count
+    gameRound = 0;
+
+    // Initializing board values
+    initializeBoardAndValues();
+
+    // Setting game over to false to indicate start of game
+    gameOver = false;
+
+    // Changing text which was prechanged when a player wins
+    startNextRound.innerHTML = "Start Next Round";
+
+    // Activating player selection buttons
+    playerOne.disabled = false;
+    playerTwo.disabled = false;
   }
-
-  // Initializing board and values
-  initializeBoardAndValues();
-
-  // Clearing Board
-  clearBoard();
 });
 
 // ********************** Touch sensitivity for mobiles ************************
