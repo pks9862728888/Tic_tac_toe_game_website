@@ -24,16 +24,13 @@ var playerOneScore = document.querySelector("#player_one_score");
 var playerTwoScore = document.querySelector("#player_two_score");
 
 // Selecting game control buttons by id
-var resetScore = document.querySelector("#reset_score");
+var resetGame = document.querySelector("#reset_game");
 var restartGame = document.querySelector("#restart_game");
 
 // Selecting winner status model by Id
 var winnerModalTitle = document.querySelector("#winner_modal_title");
 var playerVictoryText = document.querySelector("#player_victory_text");
 var startNextRound = document.querySelector("#start_next_round");
-
-// Hiding modal so that it does not get triggered accidentally
-$('#player_victory_display').modal('hide');
 
 // Player active state control variables
 var playerOneActive = false;
@@ -42,6 +39,9 @@ var playerTwoActive = false;
 // First time player select state contol variable
 var firstTime = true;
 
+// Contains information about which player started the Round
+var playerStart = "";
+
 // Players winning count
 var playerOneVictoryCount = 0;
 var playerTwoVictoryCount = 0;
@@ -49,36 +49,49 @@ var playerTwoVictoryCount = 0;
 // Game round count
 var gameRound = 0;
 
-// Board cell selected control variable
-zeroZeroSelected = false;
-zeroOneSelected = false;
-zeroTwoSelected = false;
+// Initializes cell selection variables, cells values
+function initializeBoardAndValues(){
+  // Hiding modal so that it does not get triggered accidentally
+  $('#player_victory_display').modal('hide');
 
-oneZeroSelected = false;
-oneOneSelected = false;
-oneTwoSelected = false;
+  // Board cell selected control variable
+  zeroZeroSelected = false;
+  zeroOneSelected = false;
+  zeroTwoSelected = false;
 
-twoZeroSelected = false;
-twoOneSelected = false;
-twoTwoSelected = false;
+  oneZeroSelected = false;
+  oneOneSelected = false;
+  oneTwoSelected = false;
 
-// Board cell filled value
-zeroZeroValue = "";
-zeroOneValue = "";
-zeroTwoValue = "";
+  twoZeroSelected = false;
+  twoOneSelected = false;
+  twoTwoSelected = false;
 
-oneZeroValue = "";
-oneOneValue = "";
-oneTwoValue = "";
+  // Board cell filled value
+  zeroZeroValue = "";
+  zeroOneValue = "";
+  zeroTwoValue = "";
 
-twoZeroValue = "";
-twoOneValue = "";
-twoTwoValue = "";
+  oneZeroValue = "";
+  oneOneValue = "";
+  oneTwoValue = "";
+
+  twoZeroValue = "";
+  twoOneValue = "";
+  twoTwoValue = "";
+}
+
+// Initializing the game variables
+initializeBoardAndValues();
 
 // Setting default as player 1 if user starts game without selecting player
 function selectPlayerOne(){
+  // Activating player one
   playerOneActive = true;
   firstTime = false;
+
+  // Storing information about which player started the round
+  playerStart = PLAYER_ONE;
 }
 
 // Fills board cell according to selected player
@@ -122,60 +135,119 @@ function incrementVictoryShowModal(value){
     playerTwoScore.innerHTML = "Score: " + playerTwoVictoryCount.toString();
     modalShow(2);
   }
+
+  // Setting who should start next Round
+  if(playerStart == PLAYER_ONE)
+    playerStart = PLAYER_TWO;
+  else if(playerStart == PLAYER_TWO)
+    playerStart = PLAYER_ONE;
 }
 
 // Checks victory status
 function checkVictoryStatus(){
-  if(zeroZeroValue === zeroOneValue && zeroOneValue === zeroTwoValue)
-    incrementVictoryShowModal(zeroZeroValue)
-  else if(oneZeroValue === oneOneValue && oneOneValue === oneTwoValue)
-    incrementVictoryShowModal(oneZeroValue)
-  else if(twoZeroValue === twoOneValue && twoOneValue === twoTwoValue)
-    incrementVictoryShowModal(twoZeroValue)
-  else if(zeroZeroValue === oneZeroValue && oneZeroValue === twoZeroValue)
-    incrementVictoryShowModal(zeroZeroValue)
-  else if(zeroOneValue === oneOneValue && oneOneValue === twoOneValue)
-    incrementVictoryShowModal(zeroOneValue)
-  else if(zeroTwoValue === oneOneValue && oneOneValue === twoTwoValue)
-    incrementVictoryShowModal(zeroTwoValue)
-  else if(zeroZeroValue === oneOneValue && oneOneValue === twoTwoValue)
-    incrementVictoryShowModal(zeroZeroValue)
-  else if(zeroTwoValue === oneOneValue && oneOneValue === twoZeroValue)
-    incrementVictoryShowModal(zeroTwoValue)
+  if(zeroZeroValue === zeroOneValue && zeroOneValue === zeroTwoValue && zeroZeroValue !== "")
+    incrementVictoryShowModal(zeroZeroValue);
+  else if(oneZeroValue === oneOneValue && oneOneValue === oneTwoValue && oneZeroValue !== "")
+    incrementVictoryShowModal(oneZeroValue);
+  else if(twoZeroValue === twoOneValue && twoOneValue === twoTwoValue && twoZeroValue !== "")
+    incrementVictoryShowModal(twoZeroValue);
+  else if(zeroZeroValue === oneZeroValue && oneZeroValue === twoZeroValue && zeroZeroValue !== "")
+    incrementVictoryShowModal(zeroZeroValue);
+  else if(zeroOneValue === oneOneValue && oneOneValue === twoOneValue && zeroOneValue !== "")
+    incrementVictoryShowModal(zeroOneValue);
+  else if(zeroTwoValue === oneTwoValue && oneTwoValue === twoTwoValue && zeroTwoValue !== "")
+    incrementVictoryShowModal(zeroTwoValue);
+  else if(zeroZeroValue === oneOneValue && oneOneValue === twoTwoValue && zeroZeroValue !== "")
+    incrementVictoryShowModal(zeroZeroValue);
+  else if(zeroTwoValue === oneOneValue && oneOneValue === twoZeroValue && zeroTwoValue !== "")
+    incrementVictoryShowModal(zeroTwoValue);
+}
+
+// Checking, displaying message, and clearing board in case the match is draw
+function checkFilledStatus(){
+  if(!(zeroZeroValue === zeroOneValue && zeroOneValue === zeroTwoValue && zeroZeroValue !== "")
+    && !(oneZeroValue === oneOneValue && oneOneValue === oneTwoValue && oneZeroValue !== "")
+    && !(twoZeroValue === twoOneValue && twoOneValue === twoTwoValue && twoZeroValue !== "")
+    && !(zeroZeroValue === oneZeroValue && oneZeroValue === twoZeroValue && zeroZeroValue !== "")
+    && !(zeroOneValue === oneOneValue && oneOneValue === twoOneValue && zeroOneValue !== "")
+    && !(zeroTwoValue === oneTwoValue && oneTwoValue === twoTwoValue && zeroTwoValue !== "")
+    && !(zeroZeroValue === oneOneValue && oneOneValue === twoTwoValue && zeroZeroValue !== "")
+    && !(zeroTwoValue === oneOneValue && oneOneValue === twoZeroValue && zeroTwoValue !== "")
+    &&(zeroZeroSelected && zeroOneSelected && zeroTwoSelected && oneZeroSelected
+      && oneOneSelected && oneTwoSelected && twoZeroSelected && twoOneSelected && twoTwoSelected)){
+       // Setting the player whose turn should be first for this Round
+       if(playerStart == PLAYER_ONE){
+         playerOneActive = false;
+         playerTwoActive = true;
+         playerStart = PLAYER_TWO;
+       }else if (playerStart == PLAYER_TWO) {
+         playerTwoActive = false;
+         playerOneActive = true;
+         playerStart = PLAYER_ONE;
+       }
+
+       // Incrementing Game Round
+       gameRound += 1;
+
+       // Displaying Draw match information in modal
+       winnerModalTitle.innerHTML = "Winner for Round: " + gameRound.toString();
+       playerVictoryText.innerHTML = "No winner for this round. Draw Match!";
+       $('#player_victory_display').modal('show');
+     }
+}
+
+// Clears board values of previous game
+function clearBoard(){
+  zeroZero.innerHTML = "";
+  zeroOne.innerHTML = "";
+  zeroTwo.innerHTML = "";
+
+  oneZero.innerHTML = "";
+  oneOne.innerHTML = "";
+  oneTwo.innerHTML = "";
+
+  twoZero.innerHTML = "";
+  twoOne.innerHTML = "";
+  twoTwo.innerHTML = "";
 }
 
 // Setting active state based on selected player
 playerOne.addEventListener("click", function(){
-  if(firstTime)
+  if(firstTime){
     playerOneActive = true;
     firstTime = false;
-});
+    playerStart = PLAYER_ONE;
+  }});
 
 // If user starts game without selecting player
 playerTwo.addEventListener("click", function(){
-  if(firstTime)
+  if(firstTime){
     playerTwoActive = true;
     firstTime = false;
-});
+    playerStart = PLAYER_TWO;
+  }});
 
 zeroZero.addEventListener("click", function(){
   if(!zeroZeroSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    zeroZeroValue = fillBoard()
+    zeroZeroValue = fillBoard();
     zeroZero.innerHTML = zeroZeroValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     zeroZeroSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -183,20 +255,23 @@ zeroOne.addEventListener("click", function(){
   if(!zeroOneSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    zeroOneValue = fillBoard()
+    zeroOneValue = fillBoard();
     zeroOne.innerHTML = zeroOneValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     zeroOneSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -204,20 +279,23 @@ zeroTwo.addEventListener("click", function(){
   if(!zeroTwoSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    zeroTwoValue = fillBoard()
+    zeroTwoValue = fillBoard();
     zeroTwo.innerHTML = zeroTwoValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     zeroTwoSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -225,20 +303,23 @@ oneZero.addEventListener("click", function(){
   if(!oneZeroSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    oneZeroValue = fillBoard()
+    oneZeroValue = fillBoard();
     oneZero.innerHTML = oneZeroValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     oneZeroSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -246,20 +327,23 @@ oneOne.addEventListener("click", function(){
   if(!oneOneSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
     oneOneValue = fillBoard()
     oneOne.innerHTML = oneOneValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     oneOneSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -267,20 +351,23 @@ oneTwo.addEventListener("click", function(){
   if(!oneTwoSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    oneTwoValue = fillBoard()
+    oneTwoValue = fillBoard();
     oneTwo.innerHTML = oneTwoValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     oneTwoSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -288,20 +375,23 @@ twoZero.addEventListener("click", function(){
   if(!twoZeroSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    twoZeroValue = fillBoard()
+    twoZeroValue = fillBoard();
     twoZero.innerHTML = twoZeroValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     twoZeroSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -309,20 +399,23 @@ twoOne.addEventListener("click", function(){
   if(!twoOneSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    twoOneValue = fillBoard()
+    twoOneValue = fillBoard();
     twoOne.innerHTML = twoOneValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     twoOneSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
 
@@ -330,19 +423,88 @@ twoTwo.addEventListener("click", function(){
   if(!twoTwoSelected){
     // Setting default as player 1 if user starts game without selecting player
     if(playerOneActive === false && playerTwoActive === false)
-      selectPlayerOne()
+      selectPlayerOne();
 
     // Storing the value of cell and putting value in cell according to selected player
-    twoTwoValue = fillBoard()
+    twoTwoValue = fillBoard();
     twoTwo.innerHTML = twoTwoValue;
 
     // Setting next player as active after response
-    nextPlayer()
+    nextPlayer();
 
     // Setting that this board cell has been selected
     twoTwoSelected = true;
 
     // Checking winning status
-    checkVictoryStatus()
+    checkVictoryStatus();
+
+    // Checking whether all cells are filled
+    checkFilledStatus();
 
 }});
+
+// If clear score button is clicked
+resetGame.addEventListener("click", function(){
+  // Clear displaying scores
+  playerOneScore.innerHTML = "Score: 0";
+  playerTwoScore.innerHTML = "Score: 0";
+
+  // Clearing Board
+  clearBoard();
+
+  // Player active state control variables
+  playerOneActive = false;
+  playerTwoActive = false;
+
+  // First time player select state contol variable
+  firstTime = true;
+
+  // Contains information about which player started the Round
+  playerStart = "";
+
+  // Players winning count
+  playerOneVictoryCount = 0;
+  playerTwoVictoryCount = 0;
+
+  // Game round count
+  gameRound = 0;
+
+  // Initializing board values
+  initializeBoardAndValues();
+});
+
+// If restart game button is clicked
+restartGame.addEventListener("click", function(){
+  // Setting the player whose turn should be first for this Round
+  if(playerStart == PLAYER_ONE){
+    playerOneActive = true;
+    playerTwoActive = false;
+  }else if (playerStart == PLAYER_TWO) {
+    playerTwoActive = true;
+    playerOneActive = false;
+  }
+
+  // Initializing board and values
+  initializeBoardAndValues();
+
+  // Clearing Board
+  clearBoard();
+});
+
+// If start next round is selected in modal
+startNextRound.addEventListener("click", function(){
+  // Setting the player whose turn should be first for this Round
+  if(playerStart == PLAYER_ONE){
+    playerOneActive = true;
+    playerTwoActive = false;
+  }else if (playerStart == PLAYER_TWO) {
+    playerTwoActive = true;
+    playerOneActive = false;
+  }
+
+  // Initializing board and values
+  initializeBoardAndValues();
+
+  // Clearing Board
+  clearBoard();
+});
